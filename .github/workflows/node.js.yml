@@ -112,12 +112,16 @@ jobs:
           cd frontend
           npm install  # Install all dependencies
 
+      - name: Install Netlify CLI
+        run: |
+          npm install -g netlify-cli  # Install the Netlify CLI globally
+
       - name: Build and Deploy Frontend
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}  # Use the secret for authentication
           NETLIFY_SITE_ID: a76413ba-64fe-4d88-bdaf-c8b3b714ed3b  # Your Site ID
-          NETLIFY_SITE_NAME: cyber-school-frontend-vuejs  # Your Site Name
         run: |
           cd frontend
           npm run build  # Build the Vue.js application
-          netlify deploy --prod --site $NETLIFY_SITE_ID --token $NETLIFY_AUTH_TOKEN  # Deploy to production
+          netlify deploy --prod --site $NETLIFY_SITE_ID  # Deploy to production using the site ID and authenticated with the token in the environment
+
