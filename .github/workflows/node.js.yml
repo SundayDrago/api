@@ -123,5 +123,4 @@ jobs:
         run: |
           cd frontend
           npm run build  # Build the Vue.js application
-          netlify deploy --prod --site $NETLIFY_SITE_ID  # Deploy to production using the site ID and authenticated with the token in the environment
-
+          netlify deploy --prod --site $NETLIFY_SITE_ID --dir dist  # Deploy to production using the site ID and authenticated with the token in the environment
