@@ -4,15 +4,9 @@ module.exports = {
         name: 'cyber_school_api',
         script: './server.js',  // Replace with your actual entry file
         env: {
-          NODE_ENV: 'production',
+          NODE_ENV: 'production',  // Set production environment variables
         },
-        // Render does automatic deployment via GitHub integration
-        deploy: {
-          repo: 'git@github.com:SundayDrago/api.git',
-          ref: 'origin/main', // Adjust if deploying from another branch
-          path: '/home/render/deploy', // This is where Render stores deployed apps
-          'post-deploy': 'npm install && pm2 reload ecosystem.config.js --env production',
-        },
+        // Render handles automatic deployment via GitHub integration, so no need for deploy config
       },
     ],
   };

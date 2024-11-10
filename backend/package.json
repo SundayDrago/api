@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "start:populate": "cross-env POPULATE_DATA=true node server.js",
+    "start:prod": "node server.js", 
+   "start:populate": "cross-env POPULATE_DATA=true node server.js", 
     "test": "jest",
     "deploy": "pm2 deploy ecosystem.config.js production"
   },
