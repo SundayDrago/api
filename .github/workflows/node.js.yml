@@ -98,7 +98,7 @@ jobs:
         env:
           RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Use the secret API token
         run: |
-          railway login --api-token $RAILWAY_API_TOKEN  # Authenticate using the API token
+          echo $RAILWAY_API_TOKEN | railway login --api-token  # Authenticate using the API token
 
       - name: Link Railway Project
         env:
