@@ -99,7 +99,7 @@ jobs:
           RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Reference the secret correctly
         run: |
           cd backend
-          railway link --team Personal  # Link to the Railway project with the specified ID and team
+          railway link --project 09e8b6fb-6b98-44e7-8dee-0d93e3a95269 --team Personal  # Link to the Railway project with the specified ID and team
 
       - name: Deploy Backend to Railway
         env:
