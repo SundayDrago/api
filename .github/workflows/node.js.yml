@@ -92,7 +92,7 @@ jobs:
 
       - name: Install Railway CLI
         run: |
-          npm install -g railway  # Install Railway CLI globally
+          npm install -g @railway/cli  # Install the new Railway CLI globally
 
       - name: Deploy Backend to Railway
         env:
