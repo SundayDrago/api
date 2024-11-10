@@ -1,0 +1,104 @@
+name: Node.js CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # Backend Build and Test
+  backend_build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]  # Matrix for different Node.js versions
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache Node.js modules for backend
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-backend-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}-backend-
+
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          npm install
+
+      - name: Run backend tests
+        run: |
+          cd backend
+          npm run test
+
+  # Frontend Build and Test
+  frontend_build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]  # Matrix for different Node.js versions
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache Node.js modules for frontend
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-frontend-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}-frontend-
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Run frontend tests
+        run: |
+          cd frontend
+          npm run test
+
+  # Deploy Backend
+  deploy_backend:
+    runs-on: ubuntu-latest
+    needs: [backend_build, frontend_build]  # Ensure backend build and tests run before deploy
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Deploy Backend
+        run: |
+          cd backend
+          npm run deploy  # Replace with your actual deploy command/script
+
+  # Deploy Frontend
+  deploy_frontend:
+    runs-on: ubuntu-latest
+    needs: [backend_build, frontend_build]  # Ensure frontend build and tests run before deploy
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Deploy Frontend
+        run: |
+          cd frontend
+          npm run deploy  # Replace with your actual deploy command/script
