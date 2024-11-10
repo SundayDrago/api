@@ -94,6 +94,13 @@ jobs:
         run: |
           npm install -g @railway/cli  # Install the new Railway CLI globally
 
+      - name: Link Railway Project
+        env:
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Reference the secret correctly
+        run: |
+          cd backend
+          railway link --id 09e8b6fb-6b98-44e7-8dee-0d93e3a95269  # Link to the Railway project using the project ID
+
       - name: Deploy Backend to Railway
         env:
           RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Use GitHub secrets for sensitive data
