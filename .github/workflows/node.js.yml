@@ -85,10 +85,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Install Dependencies
+        run: |
+          cd backend
+          npm install  # Install backend dependencies
+
+      - name: Install PM2
+        run: |
+          npm install -g pm2  # Install PM2 globally
+
       - name: Deploy Backend
         run: |
           cd backend
-          npm run deploy  # Replace with your actual deploy command/script
+          pm2 deploy ecosystem.config.js production  # Deploy using pm2
 
   # Deploy Frontend
   deploy_frontend:
