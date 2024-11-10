@@ -1,0 +1,58 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  MYSQL_ROOT_PASSWORD: kaspastinski
+  MYSQL_DATABASE: cyber_school
+  MYSQL_USER: root
+  MYSQL_PASSWORD: kaspastinski
+  DB_HOST: localhost
+  DB_PORT: 3306
+
+# Backend Build and Test
+backend_build:
+  stage: build
+  image: node:18
+  script:
+    - cd backend
+    - npm install
+    #- npm run build  # assuming there is a build script in backend/package.json
+  only:
+    - main
+
+backend_test:
+  stage: test
+  image: node:18
+  services:
+    - name: mysql:8.0
+      alias: mysql
+      command: [
+        "--default-authentication-plugin=mysql_native_password",
+        "--health-cmd='mysqladmin ping'",
+        "--health-interval=10s",
+        "--health-timeout=5s",
+        "--health-retries=3"
+      ]
+  before_script:
+    - cd backend
+    - apt-get update && apt-get install -y mysql-client
+    - echo "Testing connection to MySQL"
+    - until mysqladmin ping -h "127.0.0.1" --silent; do sleep 1; done
+  script:
+    - echo "Running backend tests..."
+    - npm run test
+  only:
+    - main
+
+# Deploy Job (for Backend only)
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploying to production..."
+    # Deploy backend
+    - cd backend
+    - npm run deploy  # Assuming there is a deploy script in backend/package.json
+  only:
+    - main
