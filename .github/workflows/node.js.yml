@@ -97,17 +97,17 @@ jobs:
       - name: Link Railway Project
         env:
           RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Reference the secret correctly
-          RAILWAY_PROJECT_ID: 09e8b6fb-6b98-44e7-8dee-0d93e3a95269  # Set the project ID as an environment variable
         run: |
           cd backend
-          railway link  # Link to the Railway project using the project ID
+          railway link --id 09e8b6fb-6b98-44e7-8dee-0d93e3a95269 --team Personal  # Link to the Railway project with the specified ID and team
 
       - name: Deploy Backend to Railway
         env:
           RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Use GitHub secrets for sensitive data
         run: |
           cd backend
-          railway up --project $RAILWAY_PROJECT_ID # Deploy the backend using Railway CLI
+          railway up  # Deploy the backend using Railway CLI
+
 
   # Deploy Frontend
   deploy_frontend:
