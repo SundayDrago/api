@@ -81,6 +81,7 @@ jobs:
   deploy_backend:
     runs-on: ubuntu-latest
     needs: [backend_build, frontend_build]  # Ensure backend build and tests run before deploy
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -93,29 +94,36 @@ jobs:
       - name: Install Railway CLI
         run: |
           npm install -g @railway/cli  # Install the updated Railway CLI
+      
+      - name: Railway Login
+        env:
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
+        run: |
+          railway login --token $RAILWAY_API_TOKEN
 
       - name: Link Railway Project
         env:
-          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Use the API token
-          RAILWAY_PROJECT_ID: "09e8b6fb-6b98-44e7-8dee-0d93e3a95269"  # Your project ID
-          RAILWAY_TEAM: "Personal"  # Your Railway team name
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
+          RAILWAY_PROJECT_ID: "09e8b6fb-6b98-44e7-8dee-0d93e3a95269"
+          RAILWAY_TEAM: "Personal"
         run: |
           cd backend
           railway link --project $RAILWAY_PROJECT_ID --team $RAILWAY_TEAM --environment production --service cyber_school_vj
 
       - name: Deploy Backend to Railway
         env:
-          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Use the API token
-          RAILWAY_PROJECT_ID: "09e8b6fb-6b98-44e7-8dee-0d93e3a95269"  # Your project ID
-          RAILWAY_TEAM: "Personal"  # Your Railway team name
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
+          RAILWAY_PROJECT_ID: "09e8b6fb-6b98-44e7-8dee-0d93e3a95269"
+          RAILWAY_TEAM: "Personal"
         run: |
           cd backend
-          railway up --project $RAILWAY_PROJECT_ID --team $RAILWAY_TEAM --environment production --service cyber_school_vj  # Deploy the backend to Railway
+          railway up --project $RAILWAY_PROJECT_ID --team $RAILWAY_TEAM --environment production --service cyber_school_vj
 
   # Deploy Frontend
   deploy_frontend:
     runs-on: ubuntu-latest
     needs: [backend_build, frontend_build]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -131,9 +139,9 @@ jobs:
 
       - name: Build and Deploy Frontend
         env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}  # Use the secret for authentication
-          NETLIFY_SITE_ID: a76413ba-64fe-4d88-bdaf-c8b3b714ed3b  # Your Site ID
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: a76413ba-64fe-4d88-bdaf-c8b3b714ed3b
         run: |
           cd frontend
           npm run build  # Build the Vue.js application
-          netlify deploy --prod --site $NETLIFY_SITE_ID --dir dist  # Deploy to production using the site ID and authenticated with the token in the environment
+          netlify deploy --prod --site $NETLIFY_SITE_ID --dir dist  # Deploy to production using the site ID and authenticated with the token
