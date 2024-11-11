@@ -91,7 +91,7 @@ jobs:
 
       - name: Login to Railway
         run: |
-          echo $RAILWAY_API_TOKEN | railway login  # Use a pipe to pass the token
+          railway login --apiToken $RAILWAY_API_TOKEN  # Non-interactive login with API token
         env:
           RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Use the API token
 
