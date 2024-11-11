@@ -92,24 +92,25 @@ jobs:
 
       - name: Install Railway CLI
         run: |
-          npm install -g @railway/cli  # Install the Railway CLI globally
+          npm install -g @railway/cli  # Install the updated Railway CLI
 
       - name: Link Railway Project
         env:
-          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Reference the secret correctly
-          RAILWAY_ENVIRONMENT: production
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Use the API token
+          RAILWAY_PROJECT_ID: "09e8b6fb-6b98-44e7-8dee-0d93e3a95269"  # Your project ID
+          RAILWAY_TEAM: "Personal"  # Your Railway team name
         run: |
           cd backend
-          railway link --project 09e8b6fb-6b98-44e7-8dee-0d93e3a95269 --team Personal  # Link to the Railway project
+          railway link --project $RAILWAY_PROJECT_ID --team $RAILWAY_TEAM --env production --service cyber_school_vj
 
       - name: Deploy Backend to Railway
         env:
-          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Use GitHub secrets for sensitive data
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Use the API token
+          RAILWAY_PROJECT_ID: "09e8b6fb-6b98-44e7-8dee-0d93e3a95269"  # Your project ID
+          RAILWAY_TEAM: "Personal"  # Your Railway team name
         run: |
-          # Set the RAILWAY_API_TOKEN environment variable explicitly for Railway CLI
-          export RAILWAY_API_TOKEN=${RAILWAY_API_TOKEN}
           cd backend
-          railway link --project 09e8b6fb-6b98-44e7-8dee-0d93e3a95269 --team Personal  # Link the Railway project
+          railway up --project $RAILWAY_PROJECT_ID --team $RAILWAY_TEAM --env production --service cyber_school_vj  # Deploy the backend to Railway
 
   # Deploy Frontend
   deploy_frontend:
