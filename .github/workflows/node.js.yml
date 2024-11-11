@@ -92,10 +92,7 @@ jobs:
 
       - name: Install Railway CLI
         run: |
-          npm install -g @railway/cli  # Install the Railway CLI globally
-
-      - name: Authenticate with Railway
-        run: railway login --api-token ${{ secrets.RAILWAY_API_TOKEN }}  # Use the GitHub secret for the Railway API token
+          npm install -g @railway/cli  # Install the updated Railway CLI
 
       - name: Link Railway Project
         run: |
@@ -103,6 +100,8 @@ jobs:
           railway link --project 09e8b6fb-6b98-44e7-8dee-0d93e3a95269 --team Personal  # Link to the Railway project
 
       - name: Deploy Backend to Railway
+        env:
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Use the GitHub secret for the Railway API token
         run: |
           cd backend
           railway up  # Deploy the backend to Railway
