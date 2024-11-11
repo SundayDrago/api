@@ -77,10 +77,10 @@ jobs:
           cd frontend
           npm run test
 
-  # Deploy
+  # Deploy to Railway
   deploy:
     runs-on: ubuntu-latest
-    needs: [backend_build, frontend_build]  # Ensure this job runs after the build and test jobs
+    needs: [backend_build, frontend_build]  # Ensure this job runs after builds
 
     steps:
       - name: Checkout repository
@@ -90,9 +90,9 @@ jobs:
         run: npm install -g @railway/cli  # Install the Railway CLI
 
       - name: Login to Railway
-        run: echo $RAILWAY_API_TOKEN | railway login  # Pipe the token for login
+        run: railway login --token $RAILWAY_API_TOKEN  # Login using the token
         env:
-          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Ensure the API token is set
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Use the API token
 
       - name: Link Railway Project
         run: |
@@ -106,7 +106,7 @@ jobs:
           cd backend
           railway up --project $RAILWAY_PROJECT_ID --team $RAILWAY_TEAM --environment production --service cyber_school_vj
         env:
-          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Ensure the token is available for the deployment
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Ensure the token is available
 
       - name: Build and Deploy Frontend
         run: |
@@ -114,7 +114,7 @@ jobs:
           npm run build  # Build the frontend application
           railway up --project $RAILWAY_PROJECT_ID --team $RAILWAY_TEAM --environment production --service frontend_service_name  # Adjust the service name accordingly
         env:
-          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Ensure the token is available for the deployment
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Ensure the token is available
 
   # Frontend Deploy (if needed separately)
   deploy_frontend:
