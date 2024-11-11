@@ -110,7 +110,8 @@ jobs:
           RAILWAY_TEAM: "Personal"  # Your Railway team name
         run: |
           cd backend
-          railway up --project $RAILWAY_PROJECT_ID --team $RAILWAY_TEAM --env production --service cyber_school_vj  # Deploy the backend to Railway
+          railway link --project $RAILWAY_PROJECT_ID --team $RAILWAY_TEAM --environment production --service cyber_school_vj
+
 
   # Deploy Frontend
   deploy_frontend:
