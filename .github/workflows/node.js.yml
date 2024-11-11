@@ -95,19 +95,23 @@ jobs:
         run: |
           npm install -g @railway/cli  # Install the updated Railway CLI
 
+      - name: Login to Railway
+        run: |
+          echo $RAILWAY_API_TOKEN | railway login  # Use a pipe to pass the token
+
       - name: Link Railway Project
-        env:
-          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
         run: |
           cd backend
           railway link --project $RAILWAY_PROJECT_ID --team $RAILWAY_TEAM --environment production --service cyber_school_vj
+        env:
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Make sure the API token is available as an environment variable
 
       - name: Deploy Backend to Railway
-        env:
-          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
         run: |
           cd backend
           railway up --project $RAILWAY_PROJECT_ID --team $RAILWAY_TEAM --environment production --service cyber_school_vj
+        env:
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Ensure the token is available for the deployment
 
   # Deploy Frontend
   deploy_frontend:
@@ -128,10 +132,10 @@ jobs:
           npm install -g netlify-cli  # Install the Netlify CLI globally
 
       - name: Build and Deploy Frontend
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: a76413ba-64fe-4d88-bdaf-c8b3b714ed3b
         run: |
           cd frontend
           npm run build  # Build the Vue.js application
           netlify deploy --prod --site $NETLIFY_SITE_ID --dir dist  # Deploy to production using the site ID and authenticated with the token
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: a76413ba-64fe-4d88-bdaf-c8b3b714ed3b
