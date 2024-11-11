@@ -90,7 +90,8 @@ jobs:
         run: npm install -g @railway/cli  # Install the Railway CLI
 
       - name: Login to Railway
-        run: railway login --token $RAILWAY_API_TOKEN  # Login using the token
+        run: |
+          echo $RAILWAY_API_TOKEN | railway login  # Use a pipe to pass the token
         env:
           RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}  # Use the API token
 
